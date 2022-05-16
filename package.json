@@ -1,0 +1,24 @@
+{
+  "type": "module",
+  "name": "tokenflow",
+  "version": "1.0.0",
+  "description": "Tokenize string using declared patterns and additional flow-control rules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbars/tokenflow.git"
+  },
+  "keywords": [
+    "tokenizer",
+    "parser"
+  ],
+  "author": "Denis Borzenko (bars)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bbars/tokenflow/issues"
+  },
+  "homepage": "https://github.com/bbars/tokenflow"
+}
