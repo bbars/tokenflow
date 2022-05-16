@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "tokenflow",
+  "name": "tokenizerflow",
   "version": "1.0.0",
   "description": "Tokenize string using declared patterns and additional flow-control rules",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bbars/tokenflow.git"
+    "url": "git+https://github.com/bbars/tokenizerflow.git"
   },
   "keywords": [
     "tokenizer",
@@ -18,7 +18,7 @@
   "author": "Denis Borzenko (bars)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bbars/tokenflow/issues"
+    "url": "https://github.com/bbars/tokenizerflow/issues"
   },
-  "homepage": "https://github.com/bbars/tokenflow#readme"
+  "homepage": "https://github.com/bbars/tokenizerflow#readme"
 }

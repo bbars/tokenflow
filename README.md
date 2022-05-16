@@ -1,4 +1,4 @@
-# tokenflow
+# tokenizerflow
 Tokenize string using declared patterns and additional flow-control rules
 
 ## Example
@@ -7,9 +7,9 @@ Parse PGN (Portable Game Notation):
 
 ### Extend Tokenizer to specify patterns and flow-control rules
 ```javascript
-import * as tokenflow from 'tokenflow';
+import * as tokenizerflow from 'tokenizerflow';
 
-class PgnTokenizer extends tokenflow.Tokenizer {
+class PgnTokenizer extends tokenizerflow.Tokenizer {
 	conf;
 
 	constructor(conf = {}) {
@@ -65,50 +65,50 @@ class PgnTokenizer extends tokenflow.Tokenizer {
 		switch (token.patternId) {
 			case 'headerOpen':
 				extras.prePush = extras.prePush || 'header';
-				return new tokenflow.Ctl(['headerName'], extras);
+				return new tokenizerflow.Ctl(['headerName'], extras);
 			
 			case 'headerName':
-				return new tokenflow.Ctl(['strOpen'], extras);
+				return new tokenizerflow.Ctl(['strOpen'], extras);
 			
 			case 'strOpen':
 				extras.prePush = extras.prePush || 'string';
 			case 'strBsBs':
 			case 'strBsQ':
 			case 'strAny':
-				return new tokenflow.Ctl(['strBsBs', 'strBsQ', 'strAny', 'strClose'], extras);
+				return new tokenizerflow.Ctl(['strBsBs', 'strBsQ', 'strAny', 'strClose'], extras);
 			
 			case 'strClose':
 				extras.postPop = extras.postPop || 'string';
 				return token.ctx.parent.ctxName === 'header'
-					? new tokenflow.Ctl(['headerClose'], extras)
+					? new tokenizerflow.Ctl(['headerClose'], extras)
 					: null
 				;
 			
 			case 'headerClose':
 				extras.postPop = extras.postPop || 'header';
-				return new tokenflow.Ctl(['headerOpen', /*'body',*/ 'moveNumber'], extras);
+				return new tokenizerflow.Ctl(['headerOpen', /*'body',*/ 'moveNumber'], extras);
 			
 			case 'commentOpen':
 				extras.prePush = extras.prePush || 'comment';
-				return new tokenflow.Ctl(['commentContents'], extras);
+				return new tokenizerflow.Ctl(['commentContents'], extras);
 			
 			case 'commentContents':
-				return new tokenflow.Ctl(['commentClose'], extras);
+				return new tokenizerflow.Ctl(['commentClose'], extras);
 			
 			case 'altOpen':
 				extras.prePush = extras.prePush || 'alt';
-				return new tokenflow.Ctl(['body'], extras);
+				return new tokenizerflow.Ctl(['body'], extras);
 			
 			case 'body':
-				return new tokenflow.Ctl(['moveNumber', 'end', 'moveText', 'commentOpen', 'altOpen', 'altClose', 'eof'], extras);
+				return new tokenizerflow.Ctl(['moveNumber', 'end', 'moveText', 'commentOpen', 'altOpen', 'altClose', 'eof'], extras);
 			
 			case 'moveNumber':
-				return new tokenflow.Ctl(['moveText'], extras);
+				return new tokenizerflow.Ctl(['moveText'], extras);
 			
 			case 'end':
 				return this.conf.singleDocument
-					? new tokenflow.Ctl(['eof'], extras)
-					: new tokenflow.Ctl(['documentSeparator', 'documentWeakSeparator', 'body'], extras)
+					? new tokenizerflow.Ctl(['eof'], extras)
+					: new tokenizerflow.Ctl(['documentSeparator', 'documentWeakSeparator', 'body'], extras)
 				;
 			
 			case 'commentClose':
@@ -117,13 +117,13 @@ class PgnTokenizer extends tokenflow.Tokenizer {
 				extras.postPop = extras.postPop || 'alt';
 			case 'moveText':
 				return this.conf.singleDocument
-					? new tokenflow.Ctl(['body'], extras)
-					: new tokenflow.Ctl(['documentSeparator', 'body'], extras)
+					? new tokenizerflow.Ctl(['body'], extras)
+					: new tokenizerflow.Ctl(['documentSeparator', 'body'], extras)
 				;
 			
 			case 'documentSeparator':
 			case 'documentWeakSeparator':
-				return new tokenflow.Ctl(['headerOpen', 'moveNumber'], extras);
+				return new tokenizerflow.Ctl(['headerOpen', 'moveNumber'], extras);
 		}
 	}
 }
@@ -148,16 +148,16 @@ const fillHistory = (initialState, ctx, startingIndex = 0) => {
 	let prevMove;
 	for (let i = startingIndex; i < ctx.length; i++) {
 		const item = ctx[i];
-		if (item instanceof tokenflow.Context && item.ctxName === 'comment') {
+		if (item instanceof tokenizerflow.Context && item.ctxName === 'comment') {
 			prevMove.children.push(new chess.Comment(item[0][0]));
 		}
-		else if (item instanceof tokenflow.Context && item.ctxName === 'alt') {
+		else if (item instanceof tokenizerflow.Context && item.ctxName === 'alt') {
 			prevMove.children.push(fillHistory(null, item));
 		}
-		else if (item instanceof tokenflow.Match && item.patternId === 'moveNumber') {
+		else if (item instanceof tokenizerflow.Match && item.patternId === 'moveNumber') {
 			// TODO: check
 		}
-		else if (item instanceof tokenflow.Match && item.patternId === 'moveText') {
+		else if (item instanceof tokenizerflow.Match && item.patternId === 'moveText') {
 			prevMove = new chess.MoveAbbr(item);
 			history.push(prevMove);
 		}
@@ -167,7 +167,7 @@ const fillHistory = (initialState, ctx, startingIndex = 0) => {
 
 for (let i = 0; i < root.length; i++) {
 	const item = root[i];
-	if (item instanceof tokenflow.Context && item.ctxName === 'header') {
+	if (item instanceof tokenizerflow.Context && item.ctxName === 'header') {
 		const headerName = item[0][0];
 		const headerValue = item[1][0][0];
 		if (meta[headerName] != null) {
